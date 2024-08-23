@@ -1,11 +1,8 @@
 package com.example.gradlegroovydemo.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,17 +62,22 @@ public class UserService {
 	}
 	
 //	DELETE
-	public ResponseEntity<Map<String, Boolean>> deleteUserById(@PathVariable Integer id) {
-		if (userRepo.existsById(id)) {
-			userRepo.deleteById(id);
-			Map<String, Boolean> response = new HashMap<>();
-			response.put("deleted", Boolean.TRUE);
-			return ResponseEntity.ok(response);		
-		}
-
-		else {
-			throw new NoSuchUserExistsException("No user exist with id = "+id);
-		}
+//	public ResponseEntity<Map<String, Boolean>> deleteById(Integer id) {
+//		if (userRepo.existsById(id)) {
+//			userRepo.deleteById(id);
+//			Map<String, Boolean> response = new HashMap<>();
+//			response.put("deleted", Boolean.TRUE);
+//			return ResponseEntity.ok(response);		
+//		}
+//
+//		else {
+//			throw new NoSuchUserExistsException("No user exist with id = "+id);
+//		}
+//	}
+	public void deleteById(int id) {
+		User existingUser = userRepo.findById(id)
+				.orElseThrow(()-> new NoSuchUserExistsException("No user exist with id = "+id));
+		userRepo.deleteById(existingUser.getId());
 	}
 
 }
